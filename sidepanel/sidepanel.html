@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UI Selector &amp; Playwright Locator Generator</title>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="header">
+    <h1>UI Selector &amp; Playwright Locator Generator</h1>
+    <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">🌙</button>
+  </div>
+  <div id="staleBanner" class="stale-banner" style="display:none;">
+    ⚠ Page changed — these results are from a previous tab. Click <strong>Generate Selectors</strong> to refresh.
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="multiple">Multiple Elements</div>
+    <div class="tab" data-tab="single">Single Element Inspector</div>
+    <div class="tab" data-tab="bookmarks">Bookmarks ★</div>
+    <div class="tab" data-tab="recorder">Recorder ⏺</div>
+    <div class="tab" data-tab="teststeps">Test Steps ✍</div>
+  </div>
+  
+  <div class="tab-content active" id="multiple-tab">
+    <div class="controls">
+      <button id="generate">Generate Selectors</button>
+      <button id="export" class="export-btn" disabled>Export CSV</button>
+      <button id="exportJson" class="export-btn export-json-btn" disabled>Export JSON</button>
+      <button id="exportPom" class="export-btn export-pom-btn" disabled title="Export as Playwright TypeScript Page Object Model">Export POM</button>
+      
+      <div class="highlight-toggle">
+        <input type="checkbox" id="enableHighlight" checked>
+        <label for="enableHighlight">Enable element highlighting on hover</label>
+      </div>
+    </div>
+    
+    <div class="status-message" id="statusMessage"></div>
+
+    <div class="search-bar" id="searchBar" style="display:none;">
+      <input type="text" id="searchFilter" placeholder="Filter by name, XPath, CSS or Playwright locator..." autocomplete="off" />
+    </div>
+
+    <div id="results">
+      <p>Click "Generate Selectors" to analyze the current page.</p>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="bookmarks-tab">
+    <div class="controls">
+      <button id="clearAllBookmarks" class="export-btn" style="background:#b71c1c;">Clear All Bookmarks</button>
+    </div>
+    <div id="bookmarks-content">
+      <p class="bm-empty">No bookmarks yet. Click ☆ on any element row to bookmark it.</p>
+    </div>
+  </div>
+
+  <div class="tab-content" id="recorder-tab">
+    <!-- recorder-tab.js renders all content dynamically -->
+  </div>
+
+  <div class="tab-content" id="teststeps-tab">
+    <!-- test-steps-tab.js renders all content dynamically -->
+  </div>
+
+  <div class="tab-content" id="single-tab">
+    <div class="controls">
+      <button id="toggleInspector">Start Inspection Mode</button>
+    </div>
+    <div id="singleErrorMessage" class="error-message" style="display:none;"></div>
+    
+    <div class="inspector-mode" id="inspectorMode">
+        <p>Click "Start Inspection Mode" and then click on elements to inspect them.</p>
+    </div>
+    
+    <div id="elementInfo" class="element-info" style="display: none;">
+      <h3>Element Information</h3>
+      <p><strong>Tag:</strong> <span id="elementTag"></span></p>
+      <p><strong>Text:</strong> <span id="elementText"></span></p>
+      <p><strong>Name:</strong> <span id="elementName"></span></p>
+      <button id="addToListBtn" class="add-to-list-btn" title="Copy this element into the Multiple Elements table">+ Add to List</button>
+      <button id="bookmarkSingleBtn" class="bookmark-single-btn" title="Save this element to the Bookmarks tab" disabled>☆ Bookmark</button>
+    </div>
+    
+    <div id="singleResults">
+      <!-- Grouped selectors will be displayed here -->
+    </div>
+  </div>
+  
+  <!-- Shared constants (also imported by the service worker) -->
+  <script src="../shared/contentScriptFiles.js"></script>
+
+  <!-- Code snippet generator. This lives under content/ but is used BY THE PANEL
+       (single-tab.js renders the Code Snippets section from it). It was only
+       ever registered as a content script, so window.PalTechCodeGen was
+       undefined here and the whole section silently never rendered. -->
+  <script src="../content/codeGen.js"></script>
+
+  <!-- Load utility scripts first -->
+  <script src="utils.js"></script>
+
+  <!-- Load tab-specific scripts -->
+  <script src="multi-tab.js"></script>
+  <script src="single-tab.js"></script>
+  <script src="bookmarks-tab.js"></script>
+  <script src="recorder-tab.js"></script>
+  <script src="test-steps-tab.js"></script>
+
+  <!-- Load main script that coordinates everything -->
+  <script src="sidepanel.js"></script>
+</body>
+</html>

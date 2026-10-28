@@ -1,0 +1,13 @@
+# Playwright MCP session artifacts
+.playwright-mcp/
+
+# Node.js
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/

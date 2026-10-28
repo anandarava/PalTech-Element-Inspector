@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "Test PalTech Element Inspector",
+  "version": "1.4",
+  "minimum_chrome_version": "111",
+  "description": "Generates XPath and CSS selectors for UI automation elements on the current page",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": [
+        "content/shadow.js",
+        "content/elementNaming.js",
+        "content/playwright.js",
+        "content/selectors.js",
+        "content/highlighting.js",
+        "content/inspection.js",
+        "content/codeGen.js",
+        "content/recorder.js",
+        "content/content-script.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["content/shadowHook.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_title": "Open UI Selector Panel",
+    "default_icon": {
+      "16": "images/paltech_logo3.png",
+      "48": "images/paltech_logo3.png",
+      "128": "images/paltech_logo3.png"
+    }
+  },
+  "icons": {
+    "16": "images/paltech_logo3.png",
+    "48": "images/paltech_logo3.png",
+    "128": "images/paltech_logo3.png"
+  }
+}
